@@ -53,7 +53,7 @@ mongoose.set('strictQuery', false);
 
 async function connect() {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
+    await mongoose.connect('mongodb://localhost:27017/mestodb', {
       useNewUrlParser: true,
     });
     console.log('Server connected to Mongo');
