@@ -133,7 +133,7 @@ const getUserInfo = (req, res, next) => {
       if (!user) {
         return Promise.reject(new NotFoundError('Пользователь с таким id не найден'));
       }
-      res.send(user);
+      res.send({ data: user });
     })
     .catch((err) => next(err));
 };
