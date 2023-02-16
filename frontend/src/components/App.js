@@ -129,7 +129,7 @@ function App() {
 
       if (userInfo) {
         setLoggedIn(true);
-        setUserData(userInfo.data);
+        setUserData(userInfo);
       }
     } catch (err) { console.log(err) }
     finally { setLoading(false) }

@@ -7,7 +7,6 @@ const { OK_CODE, CREATE_CODE } = require('../constants');
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .sort({ createdAt: -1 })
     .populate(['owner', 'likes'])
     .then((cards) => res.status(OK_CODE).send(cards))
     .catch((err) => next(err));
@@ -15,6 +14,7 @@ const getCards = (req, res, next) => {
 
 const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
+    .populate(['owner', 'likes'])
     .then((card) => {
       if (!card) {
         return Promise.reject(new NotFoundError('Карточка c таким id не найдена'));
@@ -35,10 +35,12 @@ const deleteCard = (req, res, next) => {
 };
 
 const createCard = (req, res, next) => {
+  console.log('creating card');
+  console.log(req.body);
   const owner = req.user._id;
   const { name, link } = req.body;
   Card.create({ name, link, owner })
-    .then((card) => Card.populate(card, 'owner'))
+    // .then((card) => Card.populate(card, 'owner'))
     .then((card) => {
       res.status(CREATE_CODE).send(card);
     })
@@ -56,6 +58,7 @@ const likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
+    .populate(['owner', 'likes'])
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Карточка с таким id не найдена');
@@ -77,6 +80,7 @@ const dislikeCard = (req, res, next) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
+    .populate(['owner', 'likes'])
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Карточка с таким id не найдена');
