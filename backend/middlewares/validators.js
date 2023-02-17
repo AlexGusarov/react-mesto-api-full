@@ -1,11 +1,18 @@
 const { celebrate, Joi } = require('celebrate');
+const userValidator = require('validator');
 const { httpRegex } = require('../constants');
 
 const validateCreatingCard = celebrate({
   body: Joi.object()
     .keys({
       name: Joi.string().required().min(2).max(30),
-      link: Joi.string().required().regex(httpRegex),
+      link: Joi.string()
+        .required()
+        .custom((value) => {
+          if (userValidator.isURL(value)) {
+            return value;
+          }
+        }),
     })
     .unknown(),
 });
@@ -59,10 +66,22 @@ const validateUserID = celebrate({
 const validateAvatar = celebrate({
   body: Joi.object()
     .keys({
-      avatar: Joi.string().regex(httpRegex),
+      avatar: Joi.string().custom((value) => {
+        if (userValidator.isURL(value)) {
+          return value;
+        }
+      }),
     })
     .unknown(),
 });
+
+// const validateAvatar = celebrate({
+//   body: Joi.object()
+//     .keys({
+//       avatar: Joi.string().regex(httpRegex),
+//     })
+//     .unknown(),
+// });
 
 module.exports = {
   validateCreatingCard,

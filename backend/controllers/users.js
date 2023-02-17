@@ -62,11 +62,7 @@ const createUser = async (req, res, next) => {
 };
 
 const updateUser = (req, res, next) => {
-  console.log('updating user');
   const { name, about } = req.body;
-  console.log(req.body);
-  console.log(name, about);
-  console.log(req.user._id);
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {

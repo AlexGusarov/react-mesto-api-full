@@ -1,24 +1,17 @@
+require('dotenv').config();
 const express = require('express');
-
 const mongoose = require('mongoose');
-
 const process = require('process');
-
 const { errors } = require('celebrate');
-
 const rateLimit = require('express-rate-limit');
-
 const helmet = require('helmet');
-
 const cors = require('cors');
-
-const { PORT = 3000 } = process.env;
-
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFoundError = require('./errors/NotFoundError');
-
 const { auth } = require('./middlewares/auth');
-
 const errorsHandler = require('./middlewares/errorsHandler');
+
+const { PORT = 3000, DB_ADDRESS } = process.env;
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -29,21 +22,22 @@ const limiter = rateLimit({
 
 const app = express();
 
-app.use(cors());
-
+app.use(cors({ origin: ['http://localhost:3001', 'https://kapibar.nomoredomainsclub.ru/'] }));
 app.use(limiter);
-
 app.use(helmet());
-
 app.use(express.json());
+app.use(requestLogger);
 
-app.use('/signin', require('./routes/signin'));
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
-app.use('/signup', require('./routes/signup'));
-
-app.use('/cards', auth, require('./routes/cards'));
-
-app.use('/users', auth, require('./routes/users'));
+app.use('/', require('./routes/signin'));
+app.use('/', require('./routes/signup'));
+app.use('/', auth, require('./routes/cards'));
+app.use('/', auth, require('./routes/users'));
 
 app.use('*', auth, (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
@@ -53,7 +47,7 @@ mongoose.set('strictQuery', false);
 
 async function connect() {
   try {
-    await mongoose.connect('mongodb://localhost:27017/mestodb', {
+    await mongoose.connect(DB_ADDRESS, {
       useNewUrlParser: true,
     });
     console.log('Server connected to Mongo');
@@ -67,6 +61,6 @@ async function connect() {
 
 connect();
 
+app.use(errorLogger);
 app.use(errors());
-
 app.use(errorsHandler);

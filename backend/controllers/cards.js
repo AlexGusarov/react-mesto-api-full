@@ -7,6 +7,7 @@ const { OK_CODE, CREATE_CODE } = require('../constants');
 
 const getCards = (req, res, next) => {
   Card.find({})
+    .sort({ createdAt: -1 })
     .populate(['owner', 'likes'])
     .then((cards) => res.status(OK_CODE).send(cards))
     .catch((err) => next(err));
@@ -40,7 +41,7 @@ const createCard = (req, res, next) => {
   const owner = req.user._id;
   const { name, link } = req.body;
   Card.create({ name, link, owner })
-    // .then((card) => Card.populate(card, 'owner'))
+    .then((card) => Card.populate(card, 'owner'))
     .then((card) => {
       res.status(CREATE_CODE).send(card);
     })
