@@ -9,7 +9,7 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import Register from "./Register";
-import { BrowserRouter, Switch, Route, Redirect, useLocation, useHistory } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Login from "./Login";
 import { ProtectedRoute } from "./ProtectedRoute";
 import InfoToolTip from "./InfoToolTip";

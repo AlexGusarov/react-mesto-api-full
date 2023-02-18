@@ -23,6 +23,7 @@ class Api {
 
 
   getUserInfo() {
+    // если убрать токен, то при входе новым пользователем будут видны данные предыдущего 
     const token = localStorage.getItem('token');
     return this._request(`${this._baseUrl}/users/me`, {
       headers: {

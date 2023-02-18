@@ -75,14 +75,6 @@ const validateAvatar = celebrate({
     .unknown(),
 });
 
-// const validateAvatar = celebrate({
-//   body: Joi.object()
-//     .keys({
-//       avatar: Joi.string().regex(httpRegex),
-//     })
-//     .unknown(),
-// });
-
 module.exports = {
   validateCreatingCard,
   validateCardId,
