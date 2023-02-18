@@ -22,7 +22,7 @@ const limiter = rateLimit({
 
 const app = express();
 
-app.use(cors({ origin: ['http://localhost:3001', 'https://kapibar.nomoredomainsclub.ru/'] }));
+app.use(cors());
 app.use(limiter);
 app.use(helmet());
 app.use(express.json());
