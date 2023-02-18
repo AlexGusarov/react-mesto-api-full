@@ -36,8 +36,6 @@ const deleteCard = (req, res, next) => {
 };
 
 const createCard = (req, res, next) => {
-  console.log('creating card');
-  console.log(req.body);
   const owner = req.user._id;
   const { name, link } = req.body;
   Card.create({ name, link, owner })

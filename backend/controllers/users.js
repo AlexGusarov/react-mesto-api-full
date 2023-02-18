@@ -6,6 +6,8 @@ const ConflictError = require('../errors/ConflictError');
 const NotFoundError = require('../errors/NotFoundError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 const { OK_CODE, CREATE_CODE } = require('../constants');
 
 const getUsers = (req, res, next) => {
@@ -115,7 +117,7 @@ const login = async (req, res, next) => {
       } else {
         const token = jwt.sign(
           { _id: user._id },
-          'top-secret',
+          NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
           { expiresIn: '7d' },
         );
 
