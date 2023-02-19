@@ -89,7 +89,8 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: 'https://api.kapibar.nomoredomainsclub.ru',
+  // baseUrl: 'https://api.kapibar.nomoredomainsclub.ru',
+  baseUrl: 'http://localhost:3000',
   headers: {
     authorization: `Bearer ${localStorage.getItem('token')}`,
     'Content-Type': 'application/json'
