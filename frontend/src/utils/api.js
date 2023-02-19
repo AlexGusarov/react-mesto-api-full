@@ -16,8 +16,13 @@ class Api {
   }
 
   getInitialCards() {
+    //если убрать токен, то после входа карточки появятся только после перезагрузки
+    const token = localStorage.getItem('token');
     return this._request(`${this._baseUrl}/cards`, {
-      headers: this.headers
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
     })
   }
 
@@ -89,8 +94,8 @@ class Api {
 }
 
 const api = new Api({
-  // baseUrl: 'https://api.kapibar.nomoredomainsclub.ru',
-  baseUrl: 'http://localhost:3000',
+  baseUrl: 'https://api.kapibar.nomoredomainsclub.ru',
+  // baseUrl: 'http://localhost:3000',
   headers: {
     authorization: `Bearer ${localStorage.getItem('token')}`,
     'Content-Type': 'application/json'
