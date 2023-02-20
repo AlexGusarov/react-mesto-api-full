@@ -3,14 +3,14 @@ const BadRequestError = require('../errors/BadRequetError');
 const NotFoundError = require('../errors/NotFoundError');
 const Forbidden = require('../errors/Forbidden');
 
-const { OK_CODE, CREATE_CODE } = require('../constants');
+const { CREATE_CODE } = require('../constants');
 
 const getCards = (req, res, next) => {
   Card.find({})
     .sort({ createdAt: -1 })
     .populate(['owner', 'likes'])
-    .then((cards) => res.status(OK_CODE).send(cards))
-    .catch((err) => next(err));
+    .then((cards) => res.send(cards))
+    .catch(next);
 };
 
 const deleteCard = (req, res, next) => {
@@ -24,8 +24,8 @@ const deleteCard = (req, res, next) => {
       if (!card.owner.equals(req.user._id)) {
         return Promise.reject(new Forbidden('Можно удалять только свои карточки'));
       }
-      card.delete();
-      res.status(OK_CODE).send({ message: 'Карточка удалена' });
+      return card.delete()
+        .then(() => res.send({ message: 'Карточка удалена' }));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -62,7 +62,7 @@ const likeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Карточка с таким id не найдена');
       }
-      res.status(OK_CODE).send(card);
+      res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -84,7 +84,7 @@ const dislikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Карточка с таким id не найдена');
       }
-      res.status(OK_CODE).send(card);
+      res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {

@@ -8,11 +8,11 @@ const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-const { OK_CODE, CREATE_CODE } = require('../constants');
+const { CREATE_CODE } = require('../constants');
 
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.status(OK_CODE).send(users))
+    .then((users) => res.send(users))
     .catch((err) => next(err));
 };
 
@@ -23,7 +23,7 @@ const getUserById = (req, res, next) => {
       if (!user) {
         return Promise.reject(new NotFoundError('Пользователь с таким id не найден'));
       }
-      res.status(OK_CODE).send(user);
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -101,10 +101,6 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      throw new UnauthorizedError('Неправильный логин или пароль');
-    }
-
     const user = await User.findOne({ email }).select('+password');
 
     if (!user) {
@@ -121,7 +117,7 @@ const login = async (req, res, next) => {
           { expiresIn: '7d' },
         );
 
-        return res.status(OK_CODE).send({ token });
+        return res.send({ token });
       }
     }
   } catch (err) {

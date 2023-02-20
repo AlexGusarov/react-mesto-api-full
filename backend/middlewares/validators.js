@@ -13,16 +13,14 @@ const validateCreatingCard = celebrate({
             return value;
           }
         }),
-    })
-    .unknown(),
+    }),
 });
 
 const validateCardId = celebrate({
   params: Joi.object()
     .keys({
-      cardId: Joi.string().required().hex(),
-    })
-    .unknown(),
+      cardId: Joi.string().required().length(24).hex(),
+    }),
 });
 
 const validateUserAuth = celebrate({
@@ -33,8 +31,7 @@ const validateUserAuth = celebrate({
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
       avatar: Joi.string().regex(httpRegex),
-    })
-    .unknown(),
+    }),
 });
 
 const validateUserLogin = celebrate({
@@ -42,8 +39,7 @@ const validateUserLogin = celebrate({
     .keys({
       email: Joi.string().required().email(),
       password: Joi.string().required(),
-    })
-    .unknown(),
+    }),
 });
 
 const validateUserUpdate = celebrate({
@@ -51,16 +47,14 @@ const validateUserUpdate = celebrate({
     .keys({
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
-    })
-    .unknown(),
+    }),
 });
 
 const validateUserID = celebrate({
   params: Joi.object()
     .keys({
-      userId: Joi.string().hex().required(),
-    })
-    .unknown(),
+      userId: Joi.string().length(24).hex().required(),
+    }),
 });
 
 const validateAvatar = celebrate({
@@ -71,8 +65,7 @@ const validateAvatar = celebrate({
           return value;
         }
       }),
-    })
-    .unknown(),
+    }),
 });
 
 module.exports = {

@@ -7,11 +7,10 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const NotFoundError = require('./errors/NotFoundError');
-const { auth } = require('./middlewares/auth');
 const errorsHandler = require('./middlewares/errorsHandler');
+const routes = require('./routes');
 
-const { PORT = 3000, DB_ADDRESS } = process.env;
+const { PORT = 3000, DB_ADDRESS = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -34,14 +33,7 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.use('/', require('./routes/signin'));
-app.use('/', require('./routes/signup'));
-app.use('/', auth, require('./routes/cards'));
-app.use('/', auth, require('./routes/users'));
-
-app.use('*', auth, (req, res, next) => {
-  next(new NotFoundError('Страница не найдена'));
-});
+app.use(routes);
 
 mongoose.set('strictQuery', false);
 
