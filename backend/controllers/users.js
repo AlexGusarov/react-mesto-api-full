@@ -13,7 +13,7 @@ const { CREATE_CODE } = require('../constants');
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 const getUserById = (req, res, next) => {
@@ -133,7 +133,7 @@ const getUserInfo = (req, res, next) => {
       }
       res.send(user);
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 module.exports = {
