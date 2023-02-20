@@ -39,17 +39,27 @@ class Api {
   }
 
   editProfile({ name, about }) {
+    //если убрать токен, то функция не работает до обновления страницы
+    const token = localStorage.getItem('token');
     return this._request(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
-      headers: this.headers,
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ name, about })
     })
   }
 
   getNewCard({ name, link }) {
+    //если убрать токен, то функция не работает до обновления страницы
+    const token = localStorage.getItem('token');
     return this._request(`${this._baseUrl}/cards`, {
       method: 'POST',
-      headers: this.headers,
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         name: name,
         link: link
@@ -65,9 +75,13 @@ class Api {
   }
 
   putLike(cardId) {
+    const token = localStorage.getItem('token');
     return this._request(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'PUT',
-      headers: this.headers
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
     })
   }
 
@@ -83,9 +97,13 @@ class Api {
   }
 
   editAvatar(data) {
+    const token = localStorage.getItem('token');
     return this._request(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
-      headers: this.headers,
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         avatar: data.avatar
       })
