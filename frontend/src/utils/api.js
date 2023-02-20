@@ -86,9 +86,13 @@ class Api {
   }
 
   deleteLike(cardId) {
+    const token = localStorage.getItem('token');
     return this._request(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: 'DELETE',
-      headers: this.headers
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
     })
   }
 
