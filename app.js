@@ -6,9 +6,9 @@ const { errors } = require('celebrate');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cors = require('cors');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
-const errorsHandler = require('./middlewares/errorsHandler');
-const routes = require('./routes');
+const { requestLogger, errorLogger } = require('./backend/middlewares/logger');
+const errorsHandler = require('./backend/middlewares/errorsHandler');
+const routes = require('./backend/routes');
 
 const { PORT = 3000, DB_ADDRESS = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 
@@ -26,12 +26,6 @@ app.use(limiter);
 app.use(helmet());
 app.use(express.json());
 app.use(requestLogger);
-
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
 
 app.use(routes);
 
