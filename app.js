@@ -9,6 +9,7 @@ const cors = require('cors');
 const { requestLogger, errorLogger } = require('./backend/middlewares/logger');
 const errorsHandler = require('./backend/middlewares/errorsHandler');
 const routes = require('./backend/routes');
+const path = require('path');
 
 const { PORT = 3000, DB_ADDRESS = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 
