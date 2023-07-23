@@ -21,6 +21,7 @@ const limiter = rateLimit({
 
 const app = express();
 
+
 app.use(cors());
 app.use(limiter);
 app.use(helmet());
@@ -28,6 +29,12 @@ app.use(express.json());
 app.use(requestLogger);
 
 app.use(routes);
+
+app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+});
 
 mongoose.set('strictQuery', false);
 
